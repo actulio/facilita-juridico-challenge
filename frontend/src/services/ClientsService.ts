@@ -1,11 +1,11 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
 import { VITE_APP_BACKEND_URL } from '../config';
 import { IClient } from '../interfaces/IClient';
 import { DataOrError, createErrorObject } from '../utils/Error';
 
 export class ClientsService {
-  private http;
+  private http: AxiosInstance;
 
   constructor() {
     this.http = axios.create({
@@ -17,12 +17,11 @@ export class ClientsService {
     });
   }
 
-  //TODO:
+  //TODO: do the search
   public async getClients(page: number): DataOrError<{ total: number; clients: IClient[] }> {
     try {
       const result = await this.http.get(`clients/?page=${page}`);
       return { data: result.data };
-      // return { data: { total: 0, clients: [] } };
     } catch (error) {
       return createErrorObject(error);
     }
@@ -58,6 +57,15 @@ export class ClientsService {
   public async updateClient(update: IClient): DataOrError<IClient> {
     try {
       const result = await this.http.put(`clients/${update.id}`, { ...update });
+      return { data: result.data };
+    } catch (error) {
+      return createErrorObject(error);
+    }
+  }
+
+  public async getBestRoute(): DataOrError<{ distance: number; route: IClient[] }> {
+    try {
+      const result = await this.http.get('clients/best-route');
       return { data: result.data };
     } catch (error) {
       return createErrorObject(error);

@@ -1,5 +1,9 @@
 ###
-GET http://localhost:3333/clients?search=me
+GET http://localhost:3333/clients?search=email
+
+
+###
+GET http://localhost:3333/clients/best-route
 
 ###
 # @name createClient

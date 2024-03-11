@@ -25,9 +25,14 @@ const AddClient = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const { name, email, phone, coord_x, coord_y } = formData;
+    if (coord_x === 0 && coord_y === 0) {
+      toast.error('Coordinates cannot be (0, 0)', { duration: 4000, position: 'top-right' });
+      return;
+    }
+
     setLoading(true);
 
-    const { name, email, phone, coord_x, coord_y } = formData;
     const result = await clientsService.createClient({
       name,
       email,

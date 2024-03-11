@@ -13,9 +13,9 @@ export default class ClientsService implements IClientService {
     limit: number,
     searchString?: string
   ): Promise<{ total: number; clients: Client[] }> {
-    const [{ count: total }] = await this.repo.count(searchString);
-    const clients = await this.repo.findAll(limit, (page - 1) * limit, searchString);
-    return { total, clients: clients };
+    const [{ count }] = await this.repo.count(searchString);
+    const clients = await this.repo.findAllWithFilter(limit, (page - 1) * limit, searchString);
+    return { total: parseInt(count), clients: clients };
   }
 
   async createClient(client: Omit<Client, 'id'>): Promise<Client> {
@@ -41,5 +41,9 @@ export default class ClientsService implements IClientService {
     const deleted = await this.repo.remove(id);
     if (!deleted) throw new Error('Client not found');
     return deleted;
+  }
+
+  async getAllWithoutFilters(): Promise<Client[]> {
+    return await this.repo.findAll();
   }
 }

@@ -42,6 +42,11 @@ const EditClient = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (formData.coord_x === 0 && formData.coord_y === 0) {
+      toast.error('Coordinates cannot be (0, 0)', { duration: 4000, position: 'top-right' });
+      return;
+    }
+
     setLoading(true);
 
     const result = await clientsService.updateClient(formData);

@@ -1,7 +1,15 @@
-import { Dropdown, Modal, Pagination, Table } from 'flowbite-react';
+import { Dropdown, Modal, Pagination, Table, inp } from 'flowbite-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
-import { CiEdit, CiRead, CiRoute, CiSquarePlus, CiTrash, CiWarning } from 'react-icons/ci';
+import {
+  CiEdit,
+  CiRead,
+  CiRoute,
+  CiSearch,
+  CiSquarePlus,
+  CiTrash,
+  CiWarning,
+} from 'react-icons/ci';
 import { SlOptionsVertical } from 'react-icons/sl';
 import { Link } from 'react-router-dom';
 
@@ -20,7 +28,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await clientsService.getClients(0);
+      const result = await clientsService.getClients(1);
       if (result.data) {
         setTotal(result.data.total);
         setClients(result.data.clients);
@@ -86,20 +94,38 @@ const Dashboard = () => {
   return (
     <div className="flex h-screen items-center justify-center p-0 md:p-4">
       <div className="w-[100%] p-2 md:w-[80%]">
-        <div className="flex flex-row-reverse gap-2">
-          <button className="align-center my-3 rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold uppercase leading-6 text-white shadow-sm hover:bg-blue-500 sm:text-xs md:my-4 md:px-4 md:py-2">
-            <Link className="flex items-center justify-center gap-2" to="/add">
-              <CiSquarePlus size={20} />
-              Add Client
-            </Link>
-          </button>
-          {/* <button className="align-center my-3 rounded-md border border-blue-700 bg-gradient-to-br py-1.5 text-sm font-semibold uppercase leading-6 text-blue-700 shadow-sm hover:border-blue-300 hover:from-violet-700 hover:to-blue-700 hover:text-white sm:text-xs md:my-4 md:px-4 md:py-2"> */}
-          <button className="align-center my-3 rounded-md border border-gray-900 bg-gradient-to-tl py-1.5 text-sm font-semibold uppercase leading-6 text-gray-700 shadow-sm hover:border-blue-300 hover:from-purple-500 hover:to-blue-500 hover:text-white sm:text-xs md:my-4 md:px-4 md:py-2">
-            <Link className="flex items-center justify-center gap-2" to="/add">
-              <CiRoute size={20} />
-              Best Route
-            </Link>
-          </button>
+        <div className="my-3 flex w-[100%] flex-col-reverse items-center gap-2 sm:flex-row sm:justify-between md:my-0">
+          <div className="w-[100%] bg-white sm:w-[300px]">
+            <label htmlFor="table-search" className="sr-only">
+              Search
+            </label>
+            <div className="relative">
+              <div className="rtl:inset-r-0 pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
+                <CiSearch />
+              </div>
+              <input
+                type="text"
+                id="table-search"
+                className="block w-[100%] rounded-lg border border-gray-300 bg-gray-50 ps-10 text-sm text-gray-900 focus:border-blue-700 "
+                placeholder="Search for name or email"
+              />
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <button className="align-center rounded-md border border-gray-900 bg-gradient-to-tl px-3 py-1.5 text-sm font-semibold uppercase leading-6 text-gray-700 shadow-sm hover:border-blue-300 hover:from-purple-500 hover:to-blue-500 hover:text-white sm:text-xs md:my-4 md:px-4 md:py-2">
+              <Link className="flex items-center justify-center gap-2" to="/best-route">
+                <CiRoute size={20} />
+                Best Route
+              </Link>
+            </button>
+            <button className="align-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold uppercase leading-6 text-white shadow-sm hover:bg-blue-500 sm:text-xs md:my-4 md:px-4 md:py-2">
+              <Link className="flex items-center justify-center gap-2" to="/add">
+                <CiSquarePlus size={20} />
+                Add Client
+              </Link>
+            </button>
+          </div>
         </div>
         <Table hoverable>
           <Table.Head>

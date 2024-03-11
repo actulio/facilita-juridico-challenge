@@ -3,6 +3,7 @@ import React from 'react';
 import { Outlet, Route, Routes, useLocation } from 'react-router-dom';
 
 import AddClient from '../pages/Clients/AddClient';
+import BestRoute from '../pages/Clients/BestRoute';
 import Dashboard from '../pages/Clients/Dashboard';
 import EditClient from '../pages/Clients/EditClient';
 import ViewClient from '../pages/Clients/ViewClient';
@@ -50,6 +51,7 @@ const RoutesWithAnimation = () => {
         <Route path="/add" element={<AddClient />} />
         <Route path="/edit/:clientId" element={<EditClient />} />
         <Route path="/view/:clientId" element={<ViewClient />} />
+        <Route path="/best-route" element={<BestRoute />} />
       </Route>
     </Routes>
   );

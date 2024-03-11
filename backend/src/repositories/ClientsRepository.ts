@@ -8,7 +8,7 @@ export default class CLientsRepository {
     this.db = db;
   }
 
-  async count(searchString?: string): Promise<[{ count: number }]> {
+  async count(searchString?: string): Promise<[{ count: string }]> {
     if (searchString?.trim()) {
       return this.db.query(
         'SELECT COUNT(*) FROM Clients WHERE name ILIKE $1 OR email ILIKE $1 OR phone ILIKE $1',
@@ -18,10 +18,10 @@ export default class CLientsRepository {
     return this.db.query('SELECT COUNT(*) FROM Clients');
   }
 
-  async findAll(limit: number, offset: number, searchString?: string): Promise<Client[]> {
+  async findAllWithFilter(limit: number, offset: number, searchString?: string): Promise<Client[]> {
     if (searchString?.trim()) {
       return this.db.manyOrNone(
-        'SELECT * FROM Clients WHERE name ILIKE $1 OR email ILIKE $1 OR phone ILIKE $1 ORDER BY id DESC LIMIT $2 OFFSET $3',
+        'SELECT * FROM Clients WHERE name ILIKE $1 OR email ILIKE $1 ORDER BY id DESC LIMIT $2 OFFSET $3',
         [`%${searchString}%`, limit, offset]
       );
     }
@@ -32,6 +32,10 @@ export default class CLientsRepository {
         offset,
       ]) || []
     );
+  }
+
+  async findAll() {
+    return this.db.manyOrNone('SELECT * FROM Clients') || [];
   }
 
   async findById(id: string): Promise<Client | null> {

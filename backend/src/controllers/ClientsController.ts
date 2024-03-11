@@ -1,7 +1,10 @@
 import { Request, Response } from 'express';
 import ClientsService from '../services/ClientsService';
+import { Client } from '../interfaces/IClientService';
+import RoutesService from '../services/RoutesService';
 
 const clientsService = new ClientsService();
+const routesService = new RoutesService();
 
 export async function getAllClients(req: Request, res: Response) {
   try {
@@ -53,6 +56,18 @@ export async function deleteClient(req: Request, res: Response) {
     const deleted = await clientsService.deleteClient(id);
     if (deleted) return res.status(200).json({ deleted: true });
     else res.status(404).send({ error: 'Client not found' });
+  } catch (error: any) {
+    res.status(500).json({ error: error?.message || error });
+  }
+}
+
+export async function getBestRoute(_: Request, res: Response) {
+  try {
+    const clients = await clientsService.getAllWithoutFilters();
+    const self: Client = { id: 0, email: '', phone: '', name: '', coord_x: 0, coord_y: 0 };
+    clients.unshift(self);
+    const response = await routesService.getBestRoute(clients);
+    res.status(200).json(response);
   } catch (error: any) {
     res.status(500).json({ error: error?.message || error });
   }
