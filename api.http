@@ -1,0 +1,37 @@
+###
+GET http://localhost:3333/clients?search=me
+
+###
+# @name createClient
+POST http://localhost:3333/clients
+Content-Type: application/json
+
+{
+    "name": "Client 1",
+    "email": "email@ddasdasmsadsa",
+    "phone": "11999999999",
+    "coord_x": 2,
+    "coord_y": 5
+}
+
+###
+# @name deleteClient
+DELETE  http://localhost:3333/clients/3
+
+
+###
+# @name createProject
+GET http://localhost:3333/clients/1
+
+###
+# @name createProject
+PUT http://localhost:3333/clients/1
+Content-Type: application/json
+
+{
+    "name": "Updated Client 1",
+    "email": "email@ddasdasmsadsa",
+    "phone": "11999999999",
+    "coord_x": 2,
+    "coord_y": 5
+}
