@@ -18,9 +18,15 @@ export class ClientsService {
   }
 
   //TODO: do the search
-  public async getClients(page: number): DataOrError<{ total: number; clients: IClient[] }> {
+  public async getClients(
+    page: number,
+    search?: string
+  ): DataOrError<{ total: number; clients: IClient[] }> {
     try {
-      const result = await this.http.get(`clients/?page=${page}`);
+      const url = search?.trim()
+        ? `/clients/?page=${page}&search=${search}`
+        : `/clients/?page=${page}`;
+      const result = await this.http.get(url);
       return { data: result.data };
     } catch (error) {
       return createErrorObject(error);

@@ -13,6 +13,7 @@ import {
 import { SlOptionsVertical } from 'react-icons/sl';
 import { Link } from 'react-router-dom';
 
+import { useDebounce } from '../../hooks/useDebounce';
 import { IClient } from '../../interfaces/IClient';
 import { ClientsService } from '../../services/ClientsService';
 
@@ -24,6 +25,8 @@ const Dashboard = () => {
   const [clients, setClients] = useState<IClient[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalClientId, setModalClientId] = useState(0);
+  const [search, setSearch] = useState('');
+
   const clientsService = useMemo(() => new ClientsService(), []);
 
   useEffect(() => {
@@ -40,7 +43,7 @@ const Dashboard = () => {
   }, [clientsService]);
 
   const onPageChange = async (page: number) => {
-    const result = await clientsService.getClients(page - 1);
+    const result = await clientsService.getClients(page - 1, search);
     if (result.data) {
       setTotal(result.data.total);
       setClients(result.data.clients);
@@ -91,6 +94,19 @@ const Dashboard = () => {
     }
   };
 
+  const getClientsWithSearchFilter = async (text: string) => {
+    if (text === search) return;
+    const result = await clientsService.getClients(1, search);
+    if (result.data) {
+      setTotal(result.data.total);
+      setClients(result.data.clients);
+    } else {
+      toast.error(result.error, { position: 'top-right' });
+    }
+  };
+
+  const debouncedSearch = useDebounce(getClientsWithSearchFilter, 1000);
+
   return (
     <div className="flex h-screen items-center justify-center p-0 md:p-4">
       <div className="w-[100%] p-2 md:w-[80%]">
@@ -106,6 +122,11 @@ const Dashboard = () => {
               <input
                 type="text"
                 id="table-search"
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value.trim());
+                  debouncedSearch(e.target.value.trim());
+                }}
                 className="block w-[100%] rounded-lg border border-gray-300 bg-gray-50 ps-10 text-sm text-gray-900 focus:border-blue-700 "
                 placeholder="Search for name or email"
               />
