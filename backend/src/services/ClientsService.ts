@@ -13,7 +13,7 @@ export default class ClientsService implements IClientService {
     limit: number,
     searchString?: string
   ): Promise<{ total: number; clients: Client[] }> {
-    const total = await this.repo.count(searchString);
+    const [{ count: total }] = await this.repo.count(searchString);
     const clients = await this.repo.findAll(limit, (page - 1) * limit, searchString);
     return { total, clients: clients };
   }

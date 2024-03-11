@@ -8,7 +8,7 @@ export default class CLientsRepository {
     this.db = db;
   }
 
-  async count(searchString?: string): Promise<number> {
+  async count(searchString?: string): Promise<[{ count: number }]> {
     if (searchString?.trim()) {
       return this.db.query(
         'SELECT COUNT(*) FROM Clients WHERE name ILIKE $1 OR email ILIKE $1 OR phone ILIKE $1',

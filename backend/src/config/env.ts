@@ -8,9 +8,7 @@ const requireEnv = (key: string) => {
 
 export function validateEnvVars() {
   try {
-    requireEnv('POSTGRES_USER');
-    requireEnv('POSTGRES_PASSWORD');
-    requireEnv('POSTGRES_DB');
+    requireEnv('POSTGRES_URL');
   } catch (err) {
     console.log(err);
     process.exit(1);
