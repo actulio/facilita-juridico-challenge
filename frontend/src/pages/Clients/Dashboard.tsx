@@ -96,7 +96,7 @@ const Dashboard = () => {
 
   const getClientsWithSearchFilter = async (text: string) => {
     if (text === search) return;
-    const result = await clientsService.getClients(1, search);
+    const result = await clientsService.getClients(1, text);
     if (result.data) {
       setTotal(result.data.total);
       setClients(result.data.clients);
@@ -105,7 +105,7 @@ const Dashboard = () => {
     }
   };
 
-  const debouncedSearch = useDebounce(getClientsWithSearchFilter, 1000);
+  const debouncedSearch = useDebounce(getClientsWithSearchFilter, 500);
 
   return (
     <div className="flex h-screen items-center justify-center p-0 md:p-4">
@@ -124,8 +124,8 @@ const Dashboard = () => {
                 id="table-search"
                 value={search}
                 onChange={(e) => {
-                  setSearch(e.target.value.trim());
-                  debouncedSearch(e.target.value.trim());
+                  setSearch(e.target.value);
+                  debouncedSearch(e.target.value);
                 }}
                 className="block w-[100%] rounded-lg border border-gray-300 bg-gray-50 ps-10 text-sm text-gray-900 focus:border-blue-700 "
                 placeholder="Search for name or email"
