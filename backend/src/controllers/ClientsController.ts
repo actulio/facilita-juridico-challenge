@@ -12,7 +12,11 @@ export async function getAllClients(req: Request, res: Response) {
     const pageNumber = parseInt(query.page) || 1;
     const limit = parseInt(query.limit) || 10;
     const searchString = query.search;
-    const response = await clientsService.getAllClients(pageNumber, limit, searchString);
+    const response = await clientsService.getAllClients(
+      Math.max(pageNumber, 1),
+      limit,
+      searchString
+    );
     res.status(200).json(response);
   } catch (error: any) {
     console.log(error);
